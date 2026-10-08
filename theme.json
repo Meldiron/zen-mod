@@ -1,9 +1,9 @@
 {
-  "id": "tab-done",
-  "name": "Tab Done",
-  "description": "Treat tabs like a todo list: check them off with confetti, build streaks, hit a daily goal, and watch old tabs age.",
-  "homepage": "https://github.com/Meldiron/zen-tab-done",
-  "readme": "https://raw.githubusercontent.com/Meldiron/zen-tab-done/main/README.md",
+  "id": "zen-mod",
+  "name": "zen-mod",
+  "description": "Meldiron's personal collection of Zen Browser tweaks. Includes Tab Done: tabs as a todo list with confetti, streaks, a daily goal and tab aging.",
+  "homepage": "https://github.com/Meldiron/zen-mod",
+  "readme": "https://raw.githubusercontent.com/Meldiron/zen-mod/main/README.md",
   "author": "Meldiron",
   "version": "1.0.0",
   "style": {
@@ -14,9 +14,17 @@
     "tab-done.uc.js": {
       "name": "Tab Done",
       "description": "Checkbox closing, confetti, streaks, daily goal, tab aging and inbox zero.",
-      "include": ["chrome://browser/content/browser.xhtml"]
+      "include": [
+        "chrome://browser/content/browser.xhtml"
+      ]
     }
   },
-  "tags": ["tabs", "productivity", "chrome"],
-  "fork": ["zen"]
+  "tags": [
+    "tabs",
+    "productivity",
+    "chrome"
+  ],
+  "fork": [
+    "zen"
+  ]
 }

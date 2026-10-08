@@ -1,6 +1,12 @@
-# Tab Done
+# zen-mod
 
-A [Zen Browser](https://zen-browser.app) mod that turns your tabs into a todo list.
+My personal collection of [Zen Browser](https://zen-browser.app) tweaks, packaged as one mod.
+
+## Features
+
+### Tab Done
+
+Turns your tabs into a todo list.
 
 - **Checkbox instead of ×**: closing a tab checks it off, with a pop, a green flash and confetti.
 - **Combos**: close tabs in quick succession for bigger bursts and a `×N combo!` counter.
@@ -12,16 +18,16 @@ A [Zen Browser](https://zen-browser.app) mod that turns your tabs into a todo li
 
 ## Install
 
-Tab Done needs JavaScript, so it is installed with [Sine](https://github.com/CosmoCreeper/Sine), the mod manager for Zen.
+zen-mod uses JavaScript, so it is installed with [Sine](https://github.com/CosmoCreeper/Sine), the mod manager for Zen.
 
 1. Install Sine by following [its instructions](https://github.com/CosmoCreeper/Sine#%EF%B8%8F-installation) and restart Zen.
 2. Open Zen settings → **Sine Mods**.
-3. Paste `https://github.com/Meldiron/zen-tab-done` into the install field and click **Install**.
+3. Paste `https://github.com/Meldiron/zen-mod` into the install field and click **Install**.
 4. Restart Zen.
 
 ## Settings
 
-Change these in the mod's settings in Sine, or in `about:config`:
+Change these in zen-mod's settings in Sine, or in `about:config`:
 
 | Preference | Default | Description |
 | --- | --- | --- |
