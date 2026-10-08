@@ -1,6 +1,6 @@
 # zen-mod
 
-My personal collection of [Zen Browser](https://zen-browser.app) tweaks, packaged as one mod.
+My personal collection of [Zen Browser](https://zen-browser.app) tweaks, packaged as one mod. See the [installation guide](#installation-guide) to set it up.
 
 ## Features
 
@@ -16,14 +16,55 @@ Turns your tabs into a todo list.
 - **Tab aging**: tabs get a yellow, orange, then red edge and fade the longer they stay open.
 - **Inbox zero**: a celebration when a workspace has no tabs left.
 
-## Install
+## Installation guide
 
-zen-mod uses JavaScript, so it is installed with [Sine](https://github.com/CosmoCreeper/Sine), the mod manager for Zen.
+zen-mod uses JavaScript, so it's installed with [Sine](https://github.com/CosmoCreeper/Sine), a community mod manager for Zen. Plain Zen Mods can't run JavaScript.
 
-1. Install Sine by following [its instructions](https://github.com/CosmoCreeper/Sine#%EF%B8%8F-installation) and restart Zen.
-2. Open Zen settings → **Sine Mods** and turn on **Enable installing JS from unofficial sources**. Without it, Sine loads only the styles and every feature that needs JavaScript stays off.
-3. Paste `https://github.com/Meldiron/zen-mod` into the install field and click **Install**.
-4. Restart Zen.
+### 1. Install Sine
+
+Download the installer for your system from the [latest Sine release](https://github.com/CosmoCreeper/Sine/releases/latest), then:
+
+- **macOS**:
+  1. Give your terminal Full Disk Access: System Settings → Privacy & Security → Full Disk Access.
+  2. Run these commands in the folder you downloaded the installer to. Use `sine-osx-x64` instead on Intel Macs:
+     ```sh
+     xattr -d com.apple.quarantine ./sine-osx-arm64
+     chmod +x ./sine-osx-arm64
+     ./sine-osx-arm64
+     ```
+- **Windows**: run `sine-win-x64.exe`, or `sine-win-arm64.exe` on ARM.
+- **Linux**: run these commands. Use `sine-linux-arm64` on ARM:
+  ```sh
+  chmod +x ./sine-linux-x64
+  ./sine-linux-x64
+  ```
+
+Prefer to do it by hand? Follow Sine's [manual installation guide](https://github.com/sineorg/docs/blob/main/src/installation.md#manual).
+
+Then open `about:support` in Zen and click **Clear startup cache…**. Zen restarts, and a **Sine Mods** section appears in Zen settings.
+
+### 2. Allow JavaScript mods
+
+In Zen settings → **Sine Mods**, turn on **Enable installing JS from unofficial sources**.
+
+zen-mod isn't in Sine's store, so without this setting Sine loads only its styles. You'd get the checkbox but no confetti, streaks or anything else.
+
+### 3. Install zen-mod
+
+1. In **Sine Mods**, paste `https://github.com/Meldiron/zen-mod` into the install field and click **Install**.
+2. Restart Zen.
+
+### 4. Check it works
+
+A ring with `0 / 10 today` should appear above the buttons at the bottom of the sidebar. If you see the green checkboxes but no ring, go back to step 2.
+
+### Updating
+
+Sine checks for updates to installed mods automatically. To update right away, use the update button in **Sine Mods**, then restart Zen.
+
+### Uninstalling
+
+Remove zen-mod in **Sine Mods** and restart Zen. To also clear your progress, reset every `tabdone.` preference in `about:config`.
 
 ## Settings
 
