@@ -159,63 +159,79 @@
 
 /* Inbox zero */
 
-#tabdone-inbox-zero {
-  position: fixed;
-  inset: 0;
-  z-index: 2147483646;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: rgba(0, 0, 0, .35);
-  backdrop-filter: blur(6px);
-  animation: tabdone-fade-in 250ms ease-out;
-}
-
-#tabdone-inbox-zero[leaving] {
-  opacity: 0;
-  transition: opacity 300ms ease;
-}
-
-.tabdone-inbox-zero-box {
-  display: flex;
+#tabdone-all-clear {
+  display: none;
   flex-direction: column;
   align-items: center;
   gap: 6px;
-  padding: 36px 56px;
-  border-radius: 24px;
-  background: light-dark(#fff, #18181b);
-  color: light-dark(#18181b, #fafafa);
-  box-shadow: 0 20px 60px rgba(0, 0, 0, .35);
-  animation: tabdone-pop 450ms cubic-bezier(.3, 1.6, .5, 1);
+  margin: auto 8px 24px;
+  font-size: 12px;
+  color: var(--toolbarbutton-icon-fill, currentColor);
+  pointer-events: none;
+  animation: tabdone-rise 600ms ease-out both;
+
+  &[shown] {
+    display: flex;
+  }
+
+  & svg {
+    width: 44px;
+    height: 44px;
+    fill: none;
+    stroke: var(--tabdone-green);
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+
+  & circle {
+    stroke-width: 2;
+    stroke-opacity: .35;
+    stroke-dasharray: 126;
+    stroke-dashoffset: 126;
+    animation: tabdone-draw 700ms ease-out forwards;
+  }
+
+  & path {
+    stroke-width: 2.5;
+    stroke-dasharray: 30;
+    stroke-dashoffset: 30;
+    animation: tabdone-draw 400ms 500ms ease-out forwards;
+  }
 }
 
-.tabdone-inbox-zero-emoji {
-  font-size: 64px;
-}
-
-.tabdone-inbox-zero-title {
-  font-size: 32px;
-  font-weight: 800;
-}
-
-.tabdone-inbox-zero-subtitle {
-  font-size: 15px;
-  opacity: .7;
-}
-
-.tabdone-inbox-zero-stats {
-  margin-top: 8px;
+.tabdone-all-clear-title {
+  margin-top: 4px;
   font-size: 14px;
   font-weight: 600;
-  color: var(--tabdone-green);
 }
 
-.tabdone-inbox-zero-goal {
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--tabdone-gold);
+.tabdone-all-clear-stats {
+  opacity: .55;
 }
 
-@keyframes tabdone-fade-in {
-  from { opacity: 0; }
+:root:not([zen-sidebar-expanded="true"]) #tabdone-all-clear {
+  display: none;
+}
+
+#tabdone-wash {
+  position: fixed;
+  z-index: 2147483646;
+  pointer-events: none;
+  border-radius: 12px;
+  background: radial-gradient(ellipse at 50% 100%, #22c55e40, #22c55e14 60%, transparent);
+  animation: tabdone-wash 1600ms ease-in-out forwards;
+}
+
+@keyframes tabdone-draw {
+  to { stroke-dashoffset: 0; }
+}
+
+@keyframes tabdone-rise {
+  from { opacity: 0; transform: translateY(6px); }
+}
+
+@keyframes tabdone-wash {
+  0% { opacity: 0; }
+  30% { opacity: 1; }
+  100% { opacity: 0; }
 }

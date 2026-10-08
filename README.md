@@ -14,7 +14,7 @@ Turns your tabs into a todo list.
 - **Daily goal ring**: a progress ring above the sidebar footer, gold once you hit your goal.
 - **Streaks**: consecutive days you hit your daily goal, shown as 🔥 next to the ring.
 - **Tab aging**: tabs get a yellow, orange, then red edge and fade the longer they stay open.
-- **Inbox zero**: a celebration when a workspace has no tabs left.
+- **Inbox zero**: when a space has no tabs left, the sidebar glows softly and a calm "All clear" check stays until you open a new tab.
 
 ## Installation guide
 
@@ -75,7 +75,7 @@ Change these in zen-mod's settings in Sine, or in `about:config`:
 | `tabdone.daily-goal` | `10` | Tabs to close per day to keep the streak |
 | `tabdone.combo-seconds` | `6` | Max seconds between closes to keep a combo going |
 | `tabdone.aging-speed` | `normal` | `off`, `fast` (2h/8h/1d), `normal` (1d/3d/7d), `slow` (3d/7d/14d) |
-| `tabdone.inbox-zero` | `true` | Celebrate when a workspace is empty |
+| `tabdone.inbox-zero` | `true` | Show the glow and "All clear" check when a space is empty |
 | `tabdone.count-shortcut` | `true` | Count Cmd/Ctrl+W closes as done, not just the checkbox |
 
 Your progress is stored in the `tabdone.state` preference.

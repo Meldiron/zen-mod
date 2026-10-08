@@ -291,48 +291,63 @@
     ).length;
   }
 
-  let overlay;
+  let allClear, wash, refreshTimer;
 
-  function showInboxZero() {
-    if (overlay) return;
-    const state = loadState();
-    const day = today(state);
-    const streak = streakOf(state);
-
-    overlay = document.createElementNS(XHTML, "div");
-    overlay.id = "tabdone-inbox-zero";
-    const box = document.createElementNS(XHTML, "div");
-    box.className = "tabdone-inbox-zero-box";
-    for (const [cls, text] of [
-      ["emoji", "🎉"],
-      ["title", "Inbox zero"],
-      ["subtitle", "Every tab in this space is done."],
-      ["stats", `${day.count} done today${streak ? ` · 🔥 ${streak} day streak` : ""}`],
-      ...(day.count >= day.goal ? [["goal", "Daily goal hit ✓"]] : []),
-    ]) {
+  function buildAllClear() {
+    allClear = document.createElementNS(XHTML, "div");
+    allClear.id = "tabdone-all-clear";
+    const svg = document.createElementNS(SVG, "svg");
+    svg.setAttribute("viewBox", "0 0 44 44");
+    const circle = document.createElementNS(SVG, "circle");
+    circle.setAttribute("cx", "22");
+    circle.setAttribute("cy", "22");
+    circle.setAttribute("r", "20");
+    const check = document.createElementNS(SVG, "path");
+    check.setAttribute("d", "M14 22.5l5.5 5.5L30.5 17");
+    svg.append(circle, check);
+    allClear.appendChild(svg);
+    for (const [cls, text] of [["title", "All clear"], ["stats", ""]]) {
       const line = document.createElementNS(XHTML, "div");
-      line.className = `tabdone-inbox-zero-${cls}`;
+      line.className = `tabdone-all-clear-${cls}`;
       line.textContent = text;
-      box.appendChild(line);
+      allClear.appendChild(line);
     }
-    overlay.appendChild(box);
-    document.documentElement.appendChild(overlay);
-    if (canvas) document.documentElement.appendChild(canvas);
-    texts = [];
+    (widget ?? document.getElementById("zen-sidebar-foot-buttons"))?.before(allClear);
+  }
 
-    rain(150);
+  function refreshAllClear() {
+    if (!allClear) return;
+    if (!pref(PREF_INBOX_ZERO, true) || remainingTodos() > 0) {
+      allClear.removeAttribute("shown");
+      return;
+    }
+    const state = loadState();
+    const streak = streakOf(state);
+    allClear.querySelector(".tabdone-all-clear-stats").textContent =
+      `${today(state).count} done today${streak ? ` · 🔥 ${streak}` : ""}`;
+    allClear.setAttribute("shown", "true");
+  }
 
-    const dismiss = () => {
-      if (!overlay) return;
-      const el = overlay;
-      overlay = null;
-      el.setAttribute("leaving", "true");
-      setTimeout(() => el.remove(), 300);
-      window.removeEventListener("keydown", dismiss, true);
-    };
-    overlay.addEventListener("click", dismiss);
-    window.addEventListener("keydown", dismiss, true);
-    setTimeout(dismiss, 4000);
+  function scheduleRefresh() {
+    clearTimeout(refreshTimer);
+    refreshTimer = setTimeout(refreshAllClear, 450);
+  }
+
+  function playWash() {
+    const sidebar = document.getElementById("navigator-toolbox")?.getBoundingClientRect();
+    if (!sidebar?.width) return;
+    wash?.remove();
+    wash = document.createElementNS(XHTML, "div");
+    wash.id = "tabdone-wash";
+    Object.assign(wash.style, {
+      left: `${sidebar.left}px`,
+      top: `${sidebar.top}px`,
+      width: `${sidebar.width}px`,
+      height: `${sidebar.height}px`,
+    });
+    document.documentElement.appendChild(wash);
+    const el = wash;
+    setTimeout(() => el.remove(), 1700);
   }
 
   // Daily goal widget
@@ -427,6 +442,8 @@
     }
   }
 
+  const REFRESH_EVENTS = ["TabOpen", "TabClose", "TabSelect", "TabShow", "TabHide", "TabAttrModified"];
+
   let checkboxClose = null;
 
   function onTabClose(event) {
@@ -447,7 +464,7 @@
     celebrate(tab, recordDone());
     if (pref(PREF_INBOX_ZERO, true)) {
       setTimeout(() => {
-        if (!window.closed && remainingTodos() === 0) showInboxZero();
+        if (!window.closed && allClear && remainingTodos() === 0) playWash();
       }, 450);
     }
   }
@@ -476,6 +493,7 @@
     observe() {
       updateWidget();
       ageTabs();
+      refreshAllClear();
     },
   };
 
@@ -487,8 +505,11 @@
     tabs.addEventListener("TabClose", onTabClose);
     tabs.addEventListener("click", onCloseClick, true);
     tabs.addEventListener("SSTabRestored", ageTabs);
+    for (const type of REFRESH_EVENTS) tabs.addEventListener(type, scheduleRefresh);
 
     buildWidget();
+    buildAllClear();
+    scheduleRefresh();
     Services.prefs.addObserver("tabdone.", prefObserver);
     SessionStore.promiseAllWindowsRestored.then(() => {
       if (window.__tabDone === instance) stampMissingCreated();
@@ -514,12 +535,15 @@
     tabs?.removeEventListener("TabClose", onTabClose);
     tabs?.removeEventListener("click", onCloseClick, true);
     tabs?.removeEventListener("SSTabRestored", ageTabs);
+    for (const type of REFRESH_EVENTS) tabs?.removeEventListener(type, scheduleRefresh);
+    clearTimeout(refreshTimer);
     Services.prefs.removeObserver("tabdone.", prefObserver);
     clearInterval(timer);
     widget?.remove();
     canvas?.remove();
-    overlay?.remove();
-    widget = canvas = overlay = null;
+    allClear?.remove();
+    wash?.remove();
+    widget = canvas = allClear = wash = null;
     particles = [];
     texts = [];
     for (const tab of gBrowser?.tabs ?? []) {
@@ -527,6 +551,7 @@
       tab.removeAttribute("tab-done");
     }
     document.getElementById("tabdone-widget")?.remove();
+    document.getElementById("tabdone-all-clear")?.remove();
     if (window.__tabDone === instance) delete window.__tabDone;
   }
 
