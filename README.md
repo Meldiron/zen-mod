@@ -14,7 +14,7 @@ Turns your tabs into a todo list.
 - **Daily goal ring**: a progress ring above the sidebar footer, gold once you hit your goal.
 - **Streaks**: consecutive days you hit your daily goal, shown as 🔥 next to the ring.
 - **Tab aging**: tabs get a yellow, orange, then red edge and fade the longer they stay open.
-- **Inbox zero**: when a space has no tabs left, the sidebar glows softly and a calm "All clear" check stays until you open a new tab.
+- **Inbox zero**: when a space has no tabs left, the sidebar glows softly and an "All clear" check appears in the middle of the sidebar for 3 seconds.
 
 ## Installation guide
 

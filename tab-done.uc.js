@@ -291,9 +291,12 @@
     ).length;
   }
 
-  let allClear, wash, refreshTimer;
+  let allClear, wash;
 
-  function buildAllClear() {
+  function showAllClear() {
+    const sidebar = document.getElementById("navigator-toolbox")?.getBoundingClientRect();
+    if (!sidebar?.width || sidebar.right <= 0) return;
+    allClear?.remove();
     allClear = document.createElementNS(XHTML, "div");
     allClear.id = "tabdone-all-clear";
     const svg = document.createElementNS(SVG, "svg");
@@ -306,31 +309,28 @@
     check.setAttribute("d", "M14 22.5l5.5 5.5L30.5 17");
     svg.append(circle, check);
     allClear.appendChild(svg);
-    for (const [cls, text] of [["title", "All clear"], ["stats", ""]]) {
+    const state = loadState();
+    const streak = streakOf(state);
+    for (const [cls, text] of [
+      ["title", "All clear"],
+      ["stats", `${today(state).count} done today${streak ? ` · 🔥 ${streak}` : ""}`],
+    ]) {
       const line = document.createElementNS(XHTML, "div");
       line.className = `tabdone-all-clear-${cls}`;
       line.textContent = text;
       allClear.appendChild(line);
     }
-    (widget ?? document.getElementById("zen-sidebar-foot-buttons"))?.before(allClear);
-  }
-
-  function refreshAllClear() {
-    if (!allClear) return;
-    if (!pref(PREF_INBOX_ZERO, true) || remainingTodos() > 0) {
-      allClear.removeAttribute("shown");
-      return;
-    }
-    const state = loadState();
-    const streak = streakOf(state);
-    allClear.querySelector(".tabdone-all-clear-stats").textContent =
-      `${today(state).count} done today${streak ? ` · 🔥 ${streak}` : ""}`;
-    allClear.setAttribute("shown", "true");
-  }
-
-  function scheduleRefresh() {
-    clearTimeout(refreshTimer);
-    refreshTimer = setTimeout(refreshAllClear, 450);
+    const footer = widget ?? document.getElementById("zen-sidebar-foot-buttons");
+    const bottom = footer?.getBoundingClientRect().top || sidebar.bottom;
+    Object.assign(allClear.style, {
+      left: `${sidebar.left}px`,
+      width: `${sidebar.width}px`,
+      top: `${(sidebar.top + bottom) / 2}px`,
+    });
+    document.documentElement.appendChild(allClear);
+    const el = allClear;
+    setTimeout(() => el.setAttribute("leaving", "true"), 3000);
+    setTimeout(() => el.remove(), 3500);
   }
 
   function playWash() {
@@ -442,8 +442,6 @@
     }
   }
 
-  const REFRESH_EVENTS = ["TabOpen", "TabClose", "TabSelect", "TabShow", "TabHide", "TabAttrModified"];
-
   let checkboxClose = null;
 
   function onTabClose(event) {
@@ -464,7 +462,10 @@
     celebrate(tab, recordDone());
     if (pref(PREF_INBOX_ZERO, true)) {
       setTimeout(() => {
-        if (!window.closed && allClear && remainingTodos() === 0) playWash();
+        if (!window.closed && remainingTodos() === 0) {
+          playWash();
+          showAllClear();
+        }
       }, 450);
     }
   }
@@ -493,7 +494,6 @@
     observe() {
       updateWidget();
       ageTabs();
-      refreshAllClear();
     },
   };
 
@@ -505,11 +505,8 @@
     tabs.addEventListener("TabClose", onTabClose);
     tabs.addEventListener("click", onCloseClick, true);
     tabs.addEventListener("SSTabRestored", ageTabs);
-    for (const type of REFRESH_EVENTS) tabs.addEventListener(type, scheduleRefresh);
 
     buildWidget();
-    buildAllClear();
-    scheduleRefresh();
     Services.prefs.addObserver("tabdone.", prefObserver);
     SessionStore.promiseAllWindowsRestored.then(() => {
       if (window.__tabDone === instance) stampMissingCreated();
@@ -535,8 +532,6 @@
     tabs?.removeEventListener("TabClose", onTabClose);
     tabs?.removeEventListener("click", onCloseClick, true);
     tabs?.removeEventListener("SSTabRestored", ageTabs);
-    for (const type of REFRESH_EVENTS) tabs?.removeEventListener(type, scheduleRefresh);
-    clearTimeout(refreshTimer);
     Services.prefs.removeObserver("tabdone.", prefObserver);
     clearInterval(timer);
     widget?.remove();
