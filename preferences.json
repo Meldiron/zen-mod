@@ -1,0 +1,42 @@
+[
+  {
+    "type": "string",
+    "property": "tabdone.daily-goal",
+    "label": "Daily goal (tabs done per day)",
+    "defaultValue": "10",
+    "value": "num",
+    "placeholder": "10"
+  },
+  {
+    "type": "string",
+    "property": "tabdone.combo-seconds",
+    "label": "Combo window (seconds between closes)",
+    "defaultValue": "6",
+    "value": "num",
+    "placeholder": "6"
+  },
+  {
+    "type": "dropdown",
+    "property": "tabdone.aging-speed",
+    "label": "Tab aging speed",
+    "defaultValue": "normal",
+    "options": [
+      { "label": "Off", "value": "off" },
+      { "label": "Fast (2h / 8h / 1 day)", "value": "fast" },
+      { "label": "Normal (1 / 3 / 7 days)", "value": "normal" },
+      { "label": "Slow (3 / 7 / 14 days)", "value": "slow" }
+    ]
+  },
+  {
+    "type": "checkbox",
+    "property": "tabdone.inbox-zero",
+    "label": "Celebrate when a workspace has no tabs left",
+    "defaultValue": true
+  },
+  {
+    "type": "checkbox",
+    "property": "tabdone.count-shortcut",
+    "label": "Count tabs closed with Cmd/Ctrl+W as done",
+    "defaultValue": true
+  }
+]

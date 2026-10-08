@@ -1,0 +1,22 @@
+{
+  "id": "tab-done",
+  "name": "Tab Done",
+  "description": "Treat tabs like a todo list: check them off with confetti, build streaks, hit a daily goal, and watch old tabs age.",
+  "homepage": "https://github.com/Meldiron/zen-tab-done",
+  "readme": "https://raw.githubusercontent.com/Meldiron/zen-tab-done/main/README.md",
+  "author": "Meldiron",
+  "version": "1.0.0",
+  "style": {
+    "chrome": "userChrome.css"
+  },
+  "preferences": "preferences.json",
+  "scripts": {
+    "tab-done.uc.js": {
+      "name": "Tab Done",
+      "description": "Checkbox closing, confetti, streaks, daily goal, tab aging and inbox zero.",
+      "include": ["chrome://browser/content/browser.xhtml"]
+    }
+  },
+  "tags": ["tabs", "productivity", "chrome"],
+  "fork": ["zen"]
+}
