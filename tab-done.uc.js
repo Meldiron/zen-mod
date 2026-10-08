@@ -275,6 +275,10 @@
 
   // Inbox zero
 
+  function isBlankTab(tab) {
+    return tab.isEmpty && !tab.hasAttribute("pending");
+  }
+
   function remainingTodos() {
     return gBrowser.visibleTabs.filter(
       tab =>
@@ -283,7 +287,7 @@
         !tab.hasAttribute("zen-essential") &&
         !tab.hasAttribute("zen-empty-tab") &&
         !tab.hasAttribute("zen-glance-tab") &&
-        !isBlankPageURL(tab.linkedBrowser?.currentURI?.spec ?? "")
+        !isBlankTab(tab)
     ).length;
   }
 
@@ -436,7 +440,7 @@
       tab.pinned ||
       tab.hasAttribute("zen-empty-tab") ||
       tab.hasAttribute("zen-glance-tab") ||
-      isBlankPageURL(tab.linkedBrowser?.currentURI?.spec ?? "") ||
+      isBlankTab(tab) ||
       (!viaCheckbox && !pref(PREF_COUNT_SHORTCUT, true))
     ) {
       return;
@@ -476,6 +480,8 @@
     },
   };
 
+  let timer, startupObserver;
+
   function init() {
     const tabs = gBrowser.tabContainer;
     tabs.addEventListener("TabOpen", onTabOpen);
@@ -485,31 +491,61 @@
 
     buildWidget();
     Services.prefs.addObserver("tabdone.", prefObserver);
-    SessionStore.promiseAllWindowsRestored.then(stampMissingCreated);
+    SessionStore.promiseAllWindowsRestored.then(() => {
+      if (window.__tabDone === instance) stampMissingCreated();
+    });
 
     let lastDay = dayKey();
-    const timer = setInterval(() => {
+    timer = setInterval(() => {
       ageTabs();
       if (dayKey() !== lastDay) {
         lastDay = dayKey();
         updateWidget();
       }
     }, 60000);
-
-    window.addEventListener("unload", () => {
-      clearInterval(timer);
-      Services.prefs.removeObserver("tabdone.", prefObserver);
-    }, { once: true });
   }
+
+  function destroy() {
+    if (startupObserver) {
+      Services.obs.removeObserver(startupObserver, "browser-delayed-startup-finished");
+      startupObserver = null;
+    }
+    const tabs = gBrowser?.tabContainer;
+    tabs?.removeEventListener("TabOpen", onTabOpen);
+    tabs?.removeEventListener("TabClose", onTabClose);
+    tabs?.removeEventListener("click", onCloseClick, true);
+    tabs?.removeEventListener("SSTabRestored", ageTabs);
+    Services.prefs.removeObserver("tabdone.", prefObserver);
+    clearInterval(timer);
+    widget?.remove();
+    canvas?.remove();
+    overlay?.remove();
+    widget = canvas = overlay = null;
+    particles = [];
+    texts = [];
+    for (const tab of gBrowser?.tabs ?? []) {
+      tab.removeAttribute("tabdone-age");
+      tab.removeAttribute("tab-done");
+    }
+    document.getElementById("tabdone-widget")?.remove();
+    if (window.__tabDone === instance) delete window.__tabDone;
+  }
+
+  window.__tabDone?.destroy();
+  const instance = { destroy };
+  window.__tabDone = instance;
+  window.addUnloadListener?.(destroy);
+  window.addEventListener("unload", destroy, { once: true });
 
   if (gBrowserInit.delayedStartupFinished) {
     init();
   } else {
-    const observer = subject => {
+    startupObserver = subject => {
       if (subject !== window) return;
-      Services.obs.removeObserver(observer, "browser-delayed-startup-finished");
+      Services.obs.removeObserver(startupObserver, "browser-delayed-startup-finished");
+      startupObserver = null;
       init();
     };
-    Services.obs.addObserver(observer, "browser-delayed-startup-finished");
+    Services.obs.addObserver(startupObserver, "browser-delayed-startup-finished");
   }
 })();

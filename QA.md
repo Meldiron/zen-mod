@@ -37,6 +37,8 @@ Run through this after every release. Get the new version first: Zen settings â†
 | 15 | Ring tooltip | Hover over the ring | Shows today's count, your current and best streak, and the all-time total |
 | 16 | Collapsed sidebar | Collapse the sidebar | Only the ring is shown, centered |
 | 17 | Persistence | Restart Zen | The count, streak and tab ages are all kept |
+| 18 | Reload | In **Sine Mods**, turn zen-mod off and back on twice without restarting | Still exactly one ring, and one close adds exactly 1 |
+| 19 | Unloaded tabs | Restart Zen, then check off a restored tab you haven't opened yet | It counts and fires confetti |
 
 ## Clean up
 
