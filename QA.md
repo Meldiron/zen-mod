@@ -32,7 +32,7 @@ Run through this after every release. Get the new version first: Zen settings â†
 | 10 | Blank tabs | Open a new tab and check it off | No count, because empty new tabs aren't tasks |
 | 11 | Tab aging | Leave tabs open, or set the aging speed to `fast` and wait | A yellow edge after 2h, orange and faded after 8h, red and grey after 1 day. Hovering or selecting a tab brings it back to full color |
 | 12 | Aging off | Set the aging speed to `off` | All the colored edges disappear right away |
-| 13 | Inbox zero | In a space, close every tab that isn't pinned | A card shows "Inbox zero" with today's count and streak, and confetti rains. A click, any key or 6s closes it |
+| 13 | Inbox zero | In a space, close every tab that isn't pinned | A card shows "Inbox zero" with today's count and streak, and confetti rains. A click, any key or 4s closes it |
 | 14 | Inbox zero off | Turn off `tabdone.inbox-zero` and repeat 13 | No card appears |
 | 15 | Ring tooltip | Hover over the ring | Shows today's count, your current and best streak, and the all-time total |
 | 16 | Collapsed sidebar | Collapse the sidebar | Only the ring is shown, centered |

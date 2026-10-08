@@ -135,7 +135,7 @@
       color: COLORS[(Math.random() * COLORS.length) | 0],
       round: Math.random() < 0.3,
       life: 0,
-      ttl: 70 + Math.random() * 40,
+      ttl: 40 + Math.random() * 25,
       ...p,
     });
   }
@@ -145,7 +145,7 @@
     const base = x < window.innerWidth / 2 ? -Math.PI / 4 : (-3 * Math.PI) / 4;
     for (let i = 0; i < count; i++) {
       const angle = base + (Math.random() - 0.5) * Math.PI * 0.9;
-      const speed = (6 + Math.random() * 9) * power;
+      const speed = (5 + Math.random() * 6) * power;
       spawn({ x, y, vx: Math.cos(angle) * speed, vy: Math.sin(angle) * speed });
     }
     start();
@@ -156,16 +156,16 @@
     for (let i = 0; i < count; i++) {
       spawn({
         x: Math.random() * window.innerWidth,
-        y: -20 - Math.random() * window.innerHeight * 0.6,
+        y: -20 - Math.random() * window.innerHeight * 0.25,
         vx: (Math.random() - 0.5) * 4,
         vy: 2 + Math.random() * 4,
-        ttl: 160 + Math.random() * 80,
+        ttl: 80 + Math.random() * 40,
       });
     }
     start();
   }
 
-  function floatText(text, x, y, { size = 16, ttl = 60, color = "#22c55e" } = {}) {
+  function floatText(text, x, y, { size = 16, ttl = 45, color = "#22c55e" } = {}) {
     ensureCanvas();
     texts.push({ text, x, y, size, ttl, color, life: 0 });
     start();
@@ -189,7 +189,7 @@
       p.y += p.vy;
       p.rot += p.vrot;
       ctx.save();
-      ctx.globalAlpha = Math.min(1, (p.ttl - p.life) / 25);
+      ctx.globalAlpha = Math.min(1, (p.ttl - p.life) / 15);
       ctx.translate(p.x, p.y);
       ctx.rotate(p.rot);
       ctx.fillStyle = p.color;
@@ -254,22 +254,22 @@
 
     const [x, y] = originFor(tab);
     const level = combo - 1;
-    burst(x, y, { count: Math.min(60 + level * 30, 320), power: Math.min(1 + level * 0.12, 2) });
+    burst(x, y, { count: Math.min(25 + level * 10, 80), power: Math.min(1 + level * 0.06, 1.3) });
     floatText(combo > 1 ? `×${combo} combo!` : "+1", x + 30, y - 10, {
-      size: Math.min(16 + level * 3, 34),
+      size: Math.min(16 + level * 2, 26),
       color: combo > 1 ? "#facc15" : "#22c55e",
     });
 
     const cx = window.innerWidth / 2, cy = window.innerHeight / 3;
     if (result.count === result.goal) {
-      rain(350);
-      setTimeout(() => burst(cx - 200, cy + 120, { count: 120, power: 1.4 }), 150);
-      setTimeout(() => burst(cx + 200, cy + 120, { count: 120, power: 1.4 }), 300);
-      floatText("Daily goal hit!", cx, cy, { size: 52, ttl: 140, color: "#22c55e" });
-      floatText(`🔥 ${result.streak} day streak`, cx, cy + 56, { size: 28, ttl: 140, color: "#fb923c" });
+      rain(120);
+      setTimeout(() => burst(cx - 200, cy + 120, { count: 40, power: 1.2 }), 150);
+      setTimeout(() => burst(cx + 200, cy + 120, { count: 40, power: 1.2 }), 300);
+      floatText("Daily goal hit!", cx, cy, { size: 44, ttl: 100, color: "#22c55e" });
+      floatText(`🔥 ${result.streak} day streak`, cx, cy + 56, { size: 24, ttl: 100, color: "#fb923c" });
     } else if (MILESTONES.includes(result.count)) {
-      rain(120 + result.count * 2);
-      floatText(`${result.count} done today!`, cx, cy, { size: 44, ttl: 120, color: "#facc15" });
+      rain(60);
+      floatText(`${result.count} done today!`, cx, cy, { size: 36, ttl: 80, color: "#facc15" });
     }
   }
 
@@ -320,8 +320,7 @@
     if (canvas) document.documentElement.appendChild(canvas);
     texts = [];
 
-    rain(400);
-    setTimeout(() => rain(200), 700);
+    rain(150);
 
     const dismiss = () => {
       if (!overlay) return;
@@ -333,7 +332,7 @@
     };
     overlay.addEventListener("click", dismiss);
     window.addEventListener("keydown", dismiss, true);
-    setTimeout(dismiss, 6000);
+    setTimeout(dismiss, 4000);
   }
 
   // Daily goal widget
