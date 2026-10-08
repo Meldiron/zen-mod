@@ -21,7 +21,7 @@ Turns your tabs into a todo list.
 zen-mod uses JavaScript, so it is installed with [Sine](https://github.com/CosmoCreeper/Sine), the mod manager for Zen.
 
 1. Install Sine by following [its instructions](https://github.com/CosmoCreeper/Sine#%EF%B8%8F-installation) and restart Zen.
-2. Open Zen settings → **Sine Mods**.
+2. Open Zen settings → **Sine Mods** and turn on **Enable installing JS from unofficial sources**. Without it, Sine loads only the styles and every feature that needs JavaScript stays off.
 3. Paste `https://github.com/Meldiron/zen-mod` into the install field and click **Install**.
 4. Restart Zen.
 

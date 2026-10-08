@@ -9,6 +9,9 @@ A collection of Zen Browser tweaks, packaged as one [Sine](https://github.com/Co
 - `preferences.json`: settings shown in Sine. Prefix each pref with the feature name (for example `tabdone.daily-goal`).
 - `<feature>.uc.js`: one script per feature, loaded into `chrome://browser/content/browser.xhtml`.
 - `README.md`: one section per feature under **Features**, plus that feature's settings in the Settings table.
+- `QA.md`: the manual test checklist. Add rows for every new feature or setting.
+
+Sine runs JavaScript from mods outside its store only when the user turns on `sine.allow-unsafe-js` ("Enable installing JS from unofficial sources"). Keep that step in the README's install instructions.
 
 ## Versioning
 
