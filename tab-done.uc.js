@@ -487,6 +487,13 @@
         gBrowser.removeTab(tab, { animate: true });
       }
       gBrowser.tabContainer._blockDblClick = true;
+      // A beforeunload prompt or the "close N tabs?" warning can cancel the
+      // close. removeTab returns synchronously in that case with the tab
+      // still open and not closing, so uncheck it so it can be done later.
+      if (!tab.closing) {
+        checkboxClose = null;
+        tab.removeAttribute("tab-done");
+      }
     }, CHECK_DELAY);
   }
 
