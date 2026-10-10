@@ -41,6 +41,7 @@ Run through this after every release. Get the new version first: Zen settings â†
 | 19 | Reload | In **Sine Mods**, turn zen-mod off and back on twice without restarting | Still exactly one ring, and one close adds exactly 1 |
 | 20 | Unloaded tabs | Restart Zen, then check off a restored tab you haven't opened yet | It counts and fires confetti |
 | 21 | Cancelled close | Open a page that warns before leaving (for example start an upload on Google Drive), check it off and pick **Stay on page** | The check and strikethrough clear right away and the count doesn't change. Checking it off again shows the warning again, and picking **Leave page** closes the tab and counts it once |
+| 22 | Library hover | With a recent download, hover the Library button at the bottom of the sidebar | The ring and count fade out under the downloads list, and fade back in once you move away. Neither shows through the list |
 
 ## Clean up
 

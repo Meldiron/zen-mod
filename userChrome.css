@@ -105,6 +105,7 @@
   color: var(--toolbarbutton-icon-fill, currentColor);
   opacity: .85;
   cursor: default;
+  transition: opacity .3s cubic-bezier(.22, 1, .36, 1);
 }
 
 #tabdone-widget:hover {
@@ -155,6 +156,13 @@
   & :is(.tabdone-count, .tabdone-streak) {
     display: none;
   }
+}
+
+/* Zen's recent downloads stack (hover the Library button) opens over the
+   area above the footer and masks the tab list away. Fade out with it. */
+
+:root:has(#zen-sidebar-foot-buttons[zen-library-stack-open]) :is(#tabdone-widget, #tabdone-all-clear) {
+  opacity: 0;
 }
 
 /* Inbox zero */
